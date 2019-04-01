@@ -22,7 +22,7 @@
 #include <esp_wifi.h>
 #include <tcpip_adapter.h>
 
-#include <lwip/apps/sntp.h>
+#include <apps/sntp/sntp.h>
 
 #include <lwip/dns.h>
 #include <lwip/netdb.h>

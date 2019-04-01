@@ -1090,7 +1090,7 @@ void CommandHandlerClass::updateGpio0Pin()
     digitalWrite(0, LOW);
   }
 
-  vTaskDelay(1);
+  vTaskDelay(100);
 }
 
 void CommandHandlerClass::onWiFiReceive()
