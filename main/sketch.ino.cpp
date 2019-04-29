@@ -23,6 +23,7 @@ extern "C" {
   #include <driver/periph_ctrl.h>
   #include <driver/uart.h>
   #include <esp_bt.h>
+  #include "esp32-hal.h"
 }
 
 #include <Arduino.h>
