@@ -22,8 +22,10 @@
 #include <driver/gpio.h>
 #include <driver/spi_slave.h>
 
-#include "wiring_digital.h"
-#include "WInterrupts.h"
+// #include "wiring_digital.h"
+// #include "WInterrupts.h"
+
+#include "esp32-hal.h"
 
 #include "SPIS.h"
 

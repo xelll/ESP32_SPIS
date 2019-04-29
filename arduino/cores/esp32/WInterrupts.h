@@ -16,6 +16,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#if 0
 
 #ifndef _WIRING_INTERRUPTS_
 #define _WIRING_INTERRUPTS_
@@ -38,6 +39,8 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif

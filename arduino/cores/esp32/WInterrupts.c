@@ -17,6 +17,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#if 0
+
 #include <driver/gpio.h>
 
 #include "wiring_digital.h"
@@ -72,3 +74,5 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
 
   gpio_intr_enable((gpio_num_t)pin);
 }
+
+#endif

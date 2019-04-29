@@ -16,6 +16,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#if 0
 
 #ifndef WIRING_DIGITAL_H
 #define WIRING_DIGITAL_H
@@ -43,3 +44,5 @@ extern int digitalRead(uint32_t pin);
 #endif
 
 #endif // WIRING_DIGITAL_H
+
+#endif
