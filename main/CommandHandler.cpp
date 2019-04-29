@@ -28,6 +28,23 @@ extern "C" {
 
 #include "CommandHandler.h"
 
+
+
+#include <ESP32analogReadNonBlocking.h>
+
+//These two are on ADC1 and will round robin with each other
+ESP32analogReadNonBlocking pin36(36, 2);
+ESP32analogReadNonBlocking pin39(39, 2);
+ESP32analogReadNonBlocking pin34(34, 2);
+ESP32analogReadNonBlocking pin35(35, 2);
+ESP32analogReadNonBlocking pin32(32, 2);
+
+//Create one Aribtration token per ADC used in your project
+static uint8_t ArbitrationToken1; //Use one Aribtration Token for anything on ADC1, GPIO: 34, 35, 36, 37, 38, 39
+// uint8_t ArbitrationToken2; //Use one Arbitration Token for anything on ADC2, GPIO: 4, 12, 13, 14, 15, 25, 26, 27
+
+
+
 const char FIRMWARE_VERSION[6] = "1.2.2";
 
 /*IPAddress*/uint32_t resolvedHostname;
@@ -979,6 +996,74 @@ int setAnalogWrite(const uint8_t command[], uint8_t response[])
   return 6;
 }
 
+uint16_t adc_val[5] = {0,0,0,0,0};
+
+int getAnalogVal(const uint8_t command[], uint8_t response[])
+{
+  response[2] = 5; // number of parameters
+
+  response[3] = 2; // parameter 1 length
+  response[4] = (adc_val[0] >> 8) & 0xff;
+  response[5] = (adc_val[0] >> 0) & 0xff;
+
+  response[6] = 2; // parameter 1 length
+  response[7] = (adc_val[1] >> 8) & 0xff;
+  response[8] = (adc_val[1] >> 0) & 0xff;
+
+  response[9] = 2; // parameter 1 length
+  response[10] = (adc_val[2] >> 8) & 0xff;
+  response[11] = (adc_val[2] >> 0) & 0xff;
+
+  response[12] = 2; // parameter 1 length
+  response[13] = (adc_val[3] >> 8) & 0xff;
+  response[14] = (adc_val[3] >> 0) & 0xff;
+
+  response[15] = 2; // parameter 1 length
+  response[16] = (adc_val[4] >> 8) & 0xff;
+  response[17] = (adc_val[4] >> 0) & 0xff;
+
+  return 19;
+}
+
+//before `getAnalogVal` should exec sample_adc * 10 times
+int sample_adc(const uint8_t command[], uint8_t response[])
+{
+  pin36.tick(ArbitrationToken1);
+  if (pin36.newValueFlag)
+  {
+    adc_val[0] = pin36.counts;
+  }
+
+  pin39.tick(ArbitrationToken1);
+  if (pin39.newValueFlag)
+  {
+    adc_val[1] = pin39.counts;
+  }
+
+  pin34.tick(ArbitrationToken1);
+  if (pin34.newValueFlag)
+  {
+    adc_val[2] = pin34.counts;
+  }
+
+  pin35.tick(ArbitrationToken1);
+  if (pin35.newValueFlag)
+  {
+    adc_val[3] = pin35.counts;
+  }
+
+  pin32.tick(ArbitrationToken1);
+  if (pin32.newValueFlag)
+  {
+    adc_val[4] = pin32.counts;
+  }
+
+  response[2] = 1; // number of parameters
+  response[3] = 1; // parameter 1 length
+  response[4] = 1;
+
+  return 6;
+} 
 
 typedef int (*CommandHandlerType)(const uint8_t command[], uint8_t response[]);
 
@@ -999,7 +1084,7 @@ const CommandHandlerType commandHandlers[] = {
   NULL, NULL, NULL, NULL, sendDataTcp, getDataBufTcp, insertDataBuf, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 
   // 0x50 -> 0x5f
-  setPinMode, setDigitalWrite, setAnalogWrite,
+  setPinMode, setDigitalWrite, setAnalogWrite,getAnalogVal,sample_adc,
 };
 
 #define NUM_COMMAND_HANDLERS (sizeof(commandHandlers) / sizeof(commandHandlers[0]))
