@@ -1065,6 +1065,11 @@ int sample_adc(const uint8_t command[], uint8_t response[])
   return 6;
 } 
 
+int soft_reset(const uint8_t command[], uint8_t response[])
+{
+  esp_restart();
+}
+
 typedef int (*CommandHandlerType)(const uint8_t command[], uint8_t response[]);
 
 const CommandHandlerType commandHandlers[] = {
@@ -1084,7 +1089,7 @@ const CommandHandlerType commandHandlers[] = {
   NULL, NULL, NULL, NULL, sendDataTcp, getDataBufTcp, insertDataBuf, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 
   // 0x50 -> 0x5f
-  setPinMode, setDigitalWrite, setAnalogWrite,getAnalogVal,sample_adc,
+  setPinMode, setDigitalWrite, setAnalogWrite,getAnalogVal,sample_adc,soft_reset,
 };
 
 #define NUM_COMMAND_HANDLERS (sizeof(commandHandlers) / sizeof(commandHandlers[0]))
